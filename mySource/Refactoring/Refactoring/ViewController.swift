@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Initial VC
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -15,6 +16,15 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    /// Have to pass the security token to the Change Password VC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == "changePassword" {
+            let changePasswordVC = segue.destination as? ChangePasswordViewController
+            changePasswordVC?.securityToken = "TOKEN"
+        }
+    }
 
 }
 
