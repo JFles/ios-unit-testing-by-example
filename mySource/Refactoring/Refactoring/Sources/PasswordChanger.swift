@@ -8,7 +8,16 @@
 
 import Foundation
 
-final class PasswordChanger {
+/// `Extract a Protocol to Support Test Doubles` in Part II
+protocol PasswordChanging {
+    func change(securityToken: String,
+                oldPassword: String,
+                newPassword: String,
+                onSuccess: @escaping () -> Void,
+                onFailure: @escaping (String) -> Void)
+}
+
+final class PasswordChanger: PasswordChanging {
     private static var pretendToSucceed = false
     private var successOrFailureTimer: SuccessOrFailureTimer?
     

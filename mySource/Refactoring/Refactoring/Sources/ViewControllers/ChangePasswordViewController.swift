@@ -18,7 +18,9 @@ class ChangePasswordViewController: UIViewController {
     @IBOutlet private(set) var confirmPasswordTextField: UITextField!
     @IBOutlet private(set) var submitButton: UIButton!
     
-    private var passwordChanger = PasswordChanger()
+    /// Change from `private` to `lazy` to use `Property Injection` in tests
+    lazy var passwordChanger: PasswordChanging = PasswordChanger()
+    
     var securityToken = ""
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let activityIndicator = UIActivityIndicatorView(style: .large)
