@@ -12,6 +12,9 @@ class ChangePasswordViewController: UIViewController {
 
     // MARK: - Properties
     
+    /// Adding an outlet for the navigationBar to expose access to tests
+    @IBOutlet private(set) var navigationBar: UINavigationBar!
+    
     @IBOutlet private(set) var cancelBarButton: UIBarButtonItem!
     @IBOutlet private(set) var oldPasswordTextField: UITextField!
     @IBOutlet private(set) var newPasswordTextField: UITextField!

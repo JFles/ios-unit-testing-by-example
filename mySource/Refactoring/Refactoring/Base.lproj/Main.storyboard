@@ -42,7 +42,7 @@
         <!--Change Password View Controller-->
         <scene sceneID="dXt-20-aPM">
             <objects>
-                <viewController storyboardIdentifier="changePassword" id="1aA-f7-Ks7" customClass="ChangePasswordViewController" customModule="Refactoring" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChangePasswordViewController" id="1aA-f7-Ks7" customClass="ChangePasswordViewController" customModule="Refactoring" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5ZK-ZE-1aj">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -126,6 +126,7 @@
                     <connections>
                         <outlet property="cancelBarButton" destination="Bct-nq-qRc" id="pW2-V1-mMp"/>
                         <outlet property="confirmPasswordTextField" destination="2wn-wo-UO3" id="VHB-hd-jZz"/>
+                        <outlet property="navigationBar" destination="2Yw-aT-0Me" id="qXq-LA-YPn"/>
                         <outlet property="newPasswordTextField" destination="Ori-uY-taW" id="gFz-zi-34s"/>
                         <outlet property="oldPasswordTextField" destination="tcb-fF-K90" id="B9n-dS-b9A"/>
                         <outlet property="submitButton" destination="M0G-Kh-dAy" id="sma-zB-hwh"/>

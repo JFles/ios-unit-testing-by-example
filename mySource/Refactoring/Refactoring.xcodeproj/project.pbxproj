@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60AD4BB326DE63BF0097604F /* ChangePasswordViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */; };
 		60D8ECA326D1C7BC0096F9AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */; };
 		60D8ECA526D1C7BC0096F9AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */; };
 		60D8ECA726D1C7BC0096F9AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA626D1C7BC0096F9AD /* ViewController.swift */; };
 		60D8ECAA26D1C7BC0096F9AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60D8ECA826D1C7BC0096F9AD /* Main.storyboard */; };
 		60D8ECAC26D1C7BE0096F9AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60D8ECAB26D1C7BE0096F9AD /* Assets.xcassets */; };
 		60D8ECAF26D1C7BE0096F9AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60D8ECAD26D1C7BE0096F9AD /* LaunchScreen.storyboard */; };
-		60D8ECBA26D1C7BE0096F9AD /* RefactoringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECB926D1C7BE0096F9AD /* RefactoringTests.swift */; };
 		60D8ECD426D1D10B0096F9AD /* PasswordChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECD326D1D10B0096F9AD /* PasswordChanger.swift */; };
 		60D8ECD726D1D4770096F9AD /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECD626D1D4770096F9AD /* ChangePasswordViewController.swift */; };
 		60D8ECDA26D314DB0096F9AD /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECD926D314DB0096F9AD /* TestHelpers.swift */; };
@@ -31,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewControllerTests.swift; sourceTree = "<group>"; };
 		60D8EC9F26D1C7BC0096F9AD /* Refactoring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Refactoring.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,7 +41,6 @@
 		60D8ECAE26D1C7BE0096F9AD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60D8ECB026D1C7BE0096F9AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60D8ECB526D1C7BE0096F9AD /* RefactoringTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RefactoringTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		60D8ECB926D1C7BE0096F9AD /* RefactoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefactoringTests.swift; sourceTree = "<group>"; };
 		60D8ECBB26D1C7BE0096F9AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60D8ECD326D1D10B0096F9AD /* PasswordChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordChanger.swift; sourceTree = "<group>"; };
 		60D8ECD626D1D4770096F9AD /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +66,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60AD4BB126DE639B0097604F /* ViewControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */,
+			);
+			path = ViewControllerTests;
+			sourceTree = "<group>";
+		};
 		60D8EC9626D1C7BC0096F9AD = {
 			isa = PBXGroup;
 			children = (
@@ -102,9 +110,9 @@
 		60D8ECB826D1C7BE0096F9AD /* RefactoringTests */ = {
 			isa = PBXGroup;
 			children = (
+				60AD4BB126DE639B0097604F /* ViewControllerTests */,
 				60D8ECDB26D31AB20096F9AD /* Mocks */,
 				60D8ECD826D314BA0096F9AD /* TestHelpers */,
-				60D8ECB926D1C7BE0096F9AD /* RefactoringTests.swift */,
 				60D8ECBB26D1C7BE0096F9AD /* Info.plist */,
 			);
 			path = RefactoringTests;
@@ -255,8 +263,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60D8ECBA26D1C7BE0096F9AD /* RefactoringTests.swift in Sources */,
 				60D8ECDA26D314DB0096F9AD /* TestHelpers.swift in Sources */,
+				60AD4BB326DE63BF0097604F /* ChangePasswordViewControllerTests.swift in Sources */,
 				60D8ECDD26D31ACA0096F9AD /* MockPasswordChanger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
