@@ -92,3 +92,21 @@ extension UIBarButtonItem.SystemItem: CustomStringConvertible {
         }
     }
 }
+
+// MARK: - Test Input Focus Helpers
+
+/// Refer to `Test Input Focus` in Part II
+func tap(_ button: UIBarButtonItem) {
+    _ = button.target?.perform(button.action, with: nil)
+}
+
+/// Adds current VC to the UIWindow for testing
+func putInViewHierarchy(_ vc: UIViewController) {
+    let window = UIWindow()
+    window.addSubview(vc.view)
+}
+
+/// Extra step to clean up the UIWindow by executing the run loop
+func executeRunLoop() {
+    RunLoop.main.run(until: Date())
+}

@@ -22,9 +22,12 @@ class ChangePasswordViewControllerTests: XCTestCase {
     }
     
     override func tearDown() {
+        executeRunLoop() // Clean out UIWindow
         sut = nil
         super.tearDown()
     }
+    
+    // MARK: - UI Configuration Tests
     
     /// can test SB outlets are connected by asserting that they're not nil after the
     /// setup method has instantiated the VC
@@ -61,4 +64,52 @@ class ChangePasswordViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.confirmPasswordTextField.placeholder, "Confirm New Password")
     }
     
+    func test_submitButton_shouldHaveTitle() {
+        XCTAssertEqual(sut.submitButton.currentTitle, "Submit")
+    }
+    
+    func test_oldPasswordTextField_shouldHavePasswordAttributes() {
+        let textField = sut.oldPasswordTextField!
+        XCTAssertEqual(textField.textContentType, .password, "textContentType")
+        XCTAssertTrue(textField.isSecureTextEntry, "secureTextEntry")
+        XCTAssertTrue(textField.enablesReturnKeyAutomatically, "enablesReturnKeyAutomatically")
+    }
+    
+    func test_newPasswordTextField_shouldHavePasswordAttributes() {
+        let textField = sut.newPasswordTextField!
+        XCTAssertEqual(textField.textContentType, .newPassword, "textContentType")
+        XCTAssertTrue(textField.isSecureTextEntry, "secureTextEntry")
+        XCTAssertTrue(textField.enablesReturnKeyAutomatically, "enablesReturnKeyAutomatically")
+    }
+    
+    func test_confirmPasswordTextField_shouldHavePasswordAttributes() {
+        let textField = sut.confirmPasswordTextField!
+        XCTAssertEqual(textField.textContentType, .newPassword, "textContentType")
+        XCTAssertTrue(textField.isSecureTextEntry, "secureTextEntry")
+        XCTAssertTrue(textField.enablesReturnKeyAutomatically, "enablesReturnKeyAutomatically")
+    }
+    
+    // MARK: - UI Behavior Tests
+    
+    /// Helper method to activate a particular textField as the first responder
+    private func putFocusOn(textField: UITextField) {
+        putInViewHierarchy(sut)
+        textField.becomeFirstResponder()
+    }
+    
+    func test_tappingCancel_withFocusOnOldPassword_shouldResignThatFocus() {
+        /// arrange
+        /// `putFocusOn` is needed to set the textField as the first responder
+        /// UIKit does not guarantee that `becomeFirstResponder()` will
+        /// set the requested field as the firstResponder, but this UIWindow
+        /// workaround allows this behavior to be tested deterministically
+        putFocusOn(textField: sut.oldPasswordTextField)
+        XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder, "precondition")
+        
+        /// act
+        sut.oldPasswordTextField.resignFirstResponder()
+        
+        /// assert
+        XCTAssertFalse(sut.oldPasswordTextField.isFirstResponder)
+    }
 }
