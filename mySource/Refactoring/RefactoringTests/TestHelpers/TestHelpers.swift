@@ -110,3 +110,10 @@ func putInViewHierarchy(_ vc: UIViewController) {
 func executeRunLoop() {
     RunLoop.main.run(until: Date())
 }
+
+// MARK: - Test UIButton Helper
+
+/// Helper to make tapping a `UIButton` more expressive at the call site
+func tap(_ button: UIButton) {
+    button.sendActions(for: .touchUpInside)
+}

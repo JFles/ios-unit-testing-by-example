@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		60AD4BB326DE63BF0097604F /* ChangePasswordViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */; };
+		60D7B62F26E54265007FDA1B /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */; };
+		60D7B63126E5428B007FDA1B /* ViewControllerPresentationSpy.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		60D8ECA326D1C7BC0096F9AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */; };
 		60D8ECA526D1C7BC0096F9AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */; };
 		60D8ECA726D1C7BC0096F9AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA626D1C7BC0096F9AD /* ViewController.swift */; };
@@ -30,8 +32,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		60D7B63026E54274007FDA1B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				60D7B63126E5428B007FDA1B /* ViewControllerPresentationSpy.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewControllerTests.swift; sourceTree = "<group>"; };
+		60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ViewControllerPresentationSpy.framework; sourceTree = "<group>"; };
 		60D8EC9F26D1C7BC0096F9AD /* Refactoring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Refactoring.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60D7B62F26E54265007FDA1B /* ViewControllerPresentationSpy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +127,7 @@
 		60D8ECB826D1C7BE0096F9AD /* RefactoringTests */ = {
 			isa = PBXGroup;
 			children = (
+				60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */,
 				60AD4BB126DE639B0097604F /* ViewControllerTests */,
 				60D8ECDB26D31AB20096F9AD /* Mocks */,
 				60D8ECD826D314BA0096F9AD /* TestHelpers */,
@@ -178,6 +196,7 @@
 				60D8ECB126D1C7BE0096F9AD /* Sources */,
 				60D8ECB226D1C7BE0096F9AD /* Frameworks */,
 				60D8ECB326D1C7BE0096F9AD /* Resources */,
+				60D7B63026E54274007FDA1B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -460,6 +479,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RefactoringTests",
+				);
 				INFOPLIST_FILE = RefactoringTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -482,6 +505,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RefactoringTests",
+				);
 				INFOPLIST_FILE = RefactoringTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (

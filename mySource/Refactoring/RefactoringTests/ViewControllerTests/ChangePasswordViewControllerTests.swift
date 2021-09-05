@@ -7,10 +7,13 @@
 //
 
 import XCTest
+import ViewControllerPresentationSpy
 @testable import Refactoring
 
 class ChangePasswordViewControllerTests: XCTestCase {
     private var sut: ChangePasswordViewController!
+    private var passwordChanger: MockPasswordChanger!
+    private var alertVerifier: AlertVerifier! // Need the `VCPS` dependency
     
     override func setUp() {
         super.setUp()
@@ -18,12 +21,17 @@ class ChangePasswordViewControllerTests: XCTestCase {
         sut = storyboard.instantiateViewController(
             identifier: String(
                 describing: ChangePasswordViewController.self))
+        passwordChanger = MockPasswordChanger()
+        sut.passwordChanger = passwordChanger
+        alertVerifier = AlertVerifier() // Need the `VCPS` dependency
         sut.loadViewIfNeeded()
     }
     
     override func tearDown() {
         executeRunLoop() // Clean out UIWindow
         sut = nil
+        passwordChanger = nil
+        alertVerifier = nil // Need the `VCPS` dependency
         super.tearDown()
     }
     
@@ -98,7 +106,6 @@ class ChangePasswordViewControllerTests: XCTestCase {
     }
     
     func test_tappingCancel_withFocusOnOldPassword_shouldResignThatFocus() {
-        /// arrange
         /// `putFocusOn` is needed to set the textField as the first responder
         /// UIKit does not guarantee that `becomeFirstResponder()` will
         /// set the requested field as the firstResponder, but this UIWindow
@@ -106,10 +113,81 @@ class ChangePasswordViewControllerTests: XCTestCase {
         putFocusOn(textField: sut.oldPasswordTextField)
         XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder, "precondition")
         
-        /// act
         sut.oldPasswordTextField.resignFirstResponder()
         
-        /// assert
         XCTAssertFalse(sut.oldPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingCancel_withFocusOnNewPassword_shouldResignThatFocus() {
+        putFocusOn(textField: sut.newPasswordTextField)
+        XCTAssertTrue(sut.newPasswordTextField.isFirstResponder, "precondition")
+        
+        sut.newPasswordTextField.resignFirstResponder()
+        
+        XCTAssertFalse(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingCancel_withFocusOnConfirmPassword_shouldResignThatFocus() {
+        putFocusOn(textField: sut.confirmPasswordTextField)
+        XCTAssertTrue(sut.confirmPasswordTextField.isFirstResponder, "precondition")
+        
+        sut.confirmPasswordTextField.resignFirstResponder()
+        
+        XCTAssertFalse(sut.confirmPasswordTextField.isFirstResponder)
+    }
+    
+    /// Will need to test dismissig the action sheet later
+    func test_tappingCancel_shouldDismissModal() {
+        let dismissalVerifier = DismissalVerifier()
+
+        tap(sut.cancelBarButton)
+
+        dismissalVerifier.verify(animated: true, dismissedViewController: sut)
+    }
+    
+    
+    // MARK: - Submit Button Tests
+    
+    // MARK: Valdate the Inputs
+    private func setUpValidPasswordEntries() {
+        sut.oldPasswordTextField.text = "NONEMPTY"
+        sut.newPasswordTextField.text = "123456"
+        sut.confirmPasswordTextField.text = sut.newPasswordTextField.text
+    }
+    
+    func test_tappingSubmit_withOldPasswordEmpty_shouldNotChangePassword() {
+        setUpValidPasswordEntries()
+        sut.oldPasswordTextField.text = ""
+        
+        tap(sut.submitButton)
+        
+        passwordChanger.verifyChangeNeverCalled()
+    }
+    
+    func test_tappingSubmit_withOldPasswordEmpty_shouldPutFocusOnOldPassword() {
+        setUpValidPasswordEntries()
+        sut.oldPasswordTextField.text = ""
+        putInViewHierarchy(sut)
+        
+        tap(sut.submitButton)
+        
+        XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder)
+    }
+    
+    private func verifyAlertPresented(
+        message: String, file: StaticString = #file, line: UInt = #line
+    ) {
+        alertVerifier.verify(
+            title: nil,
+            message: message,
+            animated : true,
+            actions: [
+                .default("OK"),
+            ],
+            presentingViewController: sut,
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(alertVerifier.preferredAction?.title, "OK", "preferred action", file: file, line: line)
     }
 }
