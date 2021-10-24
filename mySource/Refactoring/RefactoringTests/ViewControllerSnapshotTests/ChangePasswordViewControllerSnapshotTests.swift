@@ -59,8 +59,6 @@ class ChangePasswordViewControllerSnapshotTests: FBSnapshotTestCase {
         tap(sut.submitButton)
         
         verifySnapshot()
-        
-//        FBSnapshotVerifyViewController(sut)
     }
     
 }
