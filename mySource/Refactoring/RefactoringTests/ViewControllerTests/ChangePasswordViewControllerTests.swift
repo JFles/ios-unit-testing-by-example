@@ -13,7 +13,7 @@ import ViewControllerPresentationSpy
 class ChangePasswordViewControllerTests: XCTestCase {
     private var sut: ChangePasswordViewController!
     private var passwordChanger: MockPasswordChanger!
-    private var alertVerifier: AlertVerifier! // Need the `VCPS` dependency
+    private var alertVerifier: AlertVerifier!
     
     override func setUp() {
         super.setUp()
@@ -23,7 +23,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
                 describing: ChangePasswordViewController.self))
         passwordChanger = MockPasswordChanger()
         sut.passwordChanger = passwordChanger
-        alertVerifier = AlertVerifier() // Need the `VCPS` dependency
+        alertVerifier = AlertVerifier()
         sut.loadViewIfNeeded()
     }
     
@@ -98,13 +98,18 @@ class ChangePasswordViewControllerTests: XCTestCase {
     }
     
     // MARK: - UI Behavior Tests
+    // ************************
+    // Space needed for minimap
+    // ************************
+    
+    // MARK: - Cancel Button Tests
     
     /// Helper method to activate a particular textField as the first responder
     private func putFocusOn(textField: UITextField) {
         putInViewHierarchy(sut)
         textField.becomeFirstResponder()
     }
-    
+
     func test_tappingCancel_withFocusOnOldPassword_shouldResignThatFocus() {
         /// `putFocusOn` is needed to set the textField as the first responder
         /// UIKit does not guarantee that `becomeFirstResponder()` will
@@ -113,7 +118,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
         putFocusOn(textField: sut.oldPasswordTextField)
         XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder, "precondition")
         
-        sut.oldPasswordTextField.resignFirstResponder()
+        tap(sut.cancelBarButton)
         
         XCTAssertFalse(sut.oldPasswordTextField.isFirstResponder)
     }
@@ -122,7 +127,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
         putFocusOn(textField: sut.newPasswordTextField)
         XCTAssertTrue(sut.newPasswordTextField.isFirstResponder, "precondition")
         
-        sut.newPasswordTextField.resignFirstResponder()
+        tap(sut.cancelBarButton)
         
         XCTAssertFalse(sut.newPasswordTextField.isFirstResponder)
     }
@@ -131,7 +136,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
         putFocusOn(textField: sut.confirmPasswordTextField)
         XCTAssertTrue(sut.confirmPasswordTextField.isFirstResponder, "precondition")
         
-        sut.confirmPasswordTextField.resignFirstResponder()
+        tap(sut.cancelBarButton)
         
         XCTAssertFalse(sut.confirmPasswordTextField.isFirstResponder)
     }
@@ -155,6 +160,36 @@ class ChangePasswordViewControllerTests: XCTestCase {
         sut.confirmPasswordTextField.text = sut.newPasswordTextField.text
     }
     
+    private func setUpEntriesNewPasswordTooShort() {
+        sut.oldPasswordTextField.text = "NONEMPTY"
+        sut.newPasswordTextField.text = "12345"
+        sut.confirmPasswordTextField.text = sut.newPasswordTextField.text
+    }
+    
+    private func setUpMismatchedConfirmationEntry() {
+        sut.oldPasswordTextField.text = "NONEMPTY"
+        sut.newPasswordTextField.text = "123456"
+        sut.confirmPasswordTextField.text = "abcdef"
+    }
+    
+    private func verifyAlertPresented(
+        message: String, file: StaticString = #file, line: UInt = #line
+    ) {
+        alertVerifier.verify(
+            title: nil,
+            message: message,
+            animated : true,
+            actions: [
+                .default("OK"),
+            ],
+            presentingViewController: sut,
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(alertVerifier.preferredAction?.title, "OK",
+                       "preferred action", file: file, line: line)
+    }
+    
     func test_tappingSubmit_withOldPasswordEmpty_shouldNotChangePassword() {
         setUpValidPasswordEntries()
         sut.oldPasswordTextField.text = ""
@@ -174,20 +209,210 @@ class ChangePasswordViewControllerTests: XCTestCase {
         XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder)
     }
     
-    private func verifyAlertPresented(
-        message: String, file: StaticString = #file, line: UInt = #line
-    ) {
-        alertVerifier.verify(
-            title: nil,
-            message: message,
-            animated : true,
-            actions: [
-                .default("OK"),
-            ],
-            presentingViewController: sut,
-            file: file,
-            line: line
-        )
-        XCTAssertEqual(alertVerifier.preferredAction?.title, "OK", "preferred action", file: file, line: line)
+    func test_tappingSubmit_withNewPasswordEmpty_shouldNotChangePassword() {
+        // arrange
+        setUpValidPasswordEntries()
+        sut.newPasswordTextField.text = ""
+        
+        // act
+        tap(sut.submitButton)
+        
+        // assert
+        passwordChanger.verifyChangeNeverCalled()
+    }
+    
+    func test_tappingSubmit_withNewPasswordEmpty_shouldShowPasswordBlankAlert() {
+        setUpValidPasswordEntries()
+        sut.newPasswordTextField.text = ""
+        
+        tap(sut.submitButton)
+        
+        verifyAlertPresented(message: "Please enter a new password.")
+    }
+    
+    func test_tappingOKPasswordBlankAlert_shouldPutFocusOnNewPassword() throws {
+        setUpValidPasswordEntries()
+        sut.newPasswordTextField.text = ""
+        
+        tap(sut.submitButton)
+        putInViewHierarchy(sut)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertTrue(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingSubmit_withNewPasswordTooShort_shouldNotChangePassword() {
+        setUpEntriesNewPasswordTooShort()
+        
+        tap(sut.submitButton)
+        
+        passwordChanger.verifyChangeNeverCalled()
+    }
+    
+    func test_tappingSubmit_withNewPasswordTooShort_shouldShowTooShortAlert() {
+        setUpEntriesNewPasswordTooShort()
+        
+        tap(sut.submitButton)
+        
+        verifyAlertPresented(message: "The new password should have at least 6 characters.")
+    }
+    
+    func test_tappingOKInTooShortAlert_shouldClearNewAndConfirmation() throws {
+        setUpEntriesNewPasswordTooShort()
+        tap(sut.submitButton)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.newPasswordTextField.text?.isEmpty, true, "new")
+        XCTAssertEqual(sut.confirmPasswordTextField.text?.isEmpty, true, "confirmation")
+    }
+    
+    func test_tappingOKInTooShortAlert_shouldNotClearOldPasswordField() throws {
+        setUpEntriesNewPasswordTooShort()
+        tap(sut.submitButton)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.oldPasswordTextField.text?.isEmpty, false)
+    }
+    
+    func test_tappingOKInTooShortAlert_shouldPutFocusOnNewPassword() throws {
+        setUpEntriesNewPasswordTooShort()
+        tap(sut.submitButton)
+        putInViewHierarchy(sut)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertTrue(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingSubmit_withConfirmationMismatch_shouldNotChangePassword() {
+        setUpMismatchedConfirmationEntry()
+        
+        tap(sut.submitButton)
+        
+        passwordChanger.verifyChangeNeverCalled()
+    }
+    
+    func test_tappingSubmit_withConfirmationMismatch_shouldShowMismatchAlert() {
+        setUpMismatchedConfirmationEntry()
+        
+        tap(sut.submitButton)
+        
+        verifyAlertPresented(
+            message: "The new password and the confirmation password "
+                    + "don’t match. Please try again.")
+    }
+    
+    func test_tappingOKInMismatchAlert_shouldClearNewAndConfirmation() throws {
+        setUpMismatchedConfirmationEntry()
+        tap(sut.submitButton)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.newPasswordTextField.text?.isEmpty, true, "new")
+        XCTAssertEqual(sut.confirmPasswordTextField.text?.isEmpty, true, "confirmation")
+    }
+    
+    func test_tappingOKInMismatchAlert_shouldNotClearOldPasswordField() throws {
+        setUpMismatchedConfirmationEntry()
+        tap(sut.submitButton)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.oldPasswordTextField.text?.isEmpty, false)
+    }
+    
+    func test_tappingOKInMismatchAlert_shouldPutFocusOnNewPassword() throws {
+        setUpMismatchedConfirmationEntry()
+        tap(sut.submitButton)
+        putInViewHierarchy(sut)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertTrue(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    
+    
+    // MARK: - Change Password Tests
+    
+    
+    
+    // MARK: - Set appearance of password change waiting state
+    func test_tappingSubmit_withValidFieldsFocusedOnOldPassword_resignsFocus() {
+        setUpValidPasswordEntries()
+        putFocusOn(textField: sut.oldPasswordTextField)
+        XCTAssert(sut.oldPasswordTextField.isFirstResponder, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertFalse(sut.oldPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingSubmit_withValidFieldsFocusedOnNewPassword_resignsFocus() {
+        setUpValidPasswordEntries()
+        putFocusOn(textField: sut.newPasswordTextField)
+        XCTAssert(sut.newPasswordTextField.isFirstResponder, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertFalse(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingSubmit_withValidFieldsFocusedOnConfirmPassword_resignsFocus() {
+        setUpValidPasswordEntries()
+        putFocusOn(textField: sut.confirmPasswordTextField)
+        XCTAssert(sut.confirmPasswordTextField.isFirstResponder, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertFalse(sut.confirmPasswordTextField.isFirstResponder)
+    }
+    
+    func test_tappingSubmit_withValidFields_shouldDisableCancelBarButton() {
+        setUpValidPasswordEntries()
+        XCTAssertTrue(sut.cancelBarButton.isEnabled, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertFalse(sut.cancelBarButton.isEnabled)
+    }
+    
+    func test_tappingSubmit_withValidFields_shouldShowBlurView() {
+        setUpValidPasswordEntries()
+        XCTAssertNil(sut.blurView.superview, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertNotNil(sut.blurView.superview)
+    }
+    
+    func test_tappingSubmit_withValidFields_shouldShowActivityIndicator() {
+        setUpValidPasswordEntries()
+        XCTAssertNil(sut.activityIndicator.superview, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertNotNil(sut.activityIndicator.superview)
+    }
+    
+    func test_tappingSubmit_withValidFields_shouldStartActivityAnimation() {
+        setUpValidPasswordEntries()
+        XCTAssertFalse(sut.activityIndicator.isAnimating, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertTrue(sut.activityIndicator.isAnimating)
+    }
+    
+    func test_tappingSubmit_withValidFields_shouldClearBackgroundColorForBlur() {
+        setUpValidPasswordEntries()
+        XCTAssertNotEqual(sut.view.backgroundColor, .clear, "precondition")
+        
+        tap(sut.submitButton)
+        
+        XCTAssertEqual(sut.view.backgroundColor, .clear)
     }
 }
