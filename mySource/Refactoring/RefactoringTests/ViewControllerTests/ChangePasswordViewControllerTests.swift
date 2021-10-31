@@ -415,4 +415,84 @@ class ChangePasswordViewControllerTests: XCTestCase {
         
         XCTAssertEqual(sut.view.backgroundColor, .clear)
     }
+    
+    
+    // MARK: - Password Changer Tests
+    func test_tappingSubmit_withValidFields_shouldRequestChangePassword() {
+        // setting the sut props in the test to make it more clear what/how its being tested
+        sut.securityToken = "TOKEN"
+        sut.oldPasswordTextField.text = "OLD456"
+        sut.newPasswordTextField.text = "NEW456"
+        sut.confirmPasswordTextField.text = sut.newPasswordTextField.text
+        
+        tap(sut.submitButton)
+        
+        passwordChanger.verifyChange(
+            securityToken: "TOKEN",
+            oldPassword: "OLD456",
+            newPassword: "NEW456"
+        )
+    }
+    
+    func test_changePasswordSuccess_shouldStopActivityIndicatorAnimation() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton) // this calls `changePassword` in the VC
+        XCTAssertTrue(sut.activityIndicator.isAnimating, "precondition")
+        
+        // This calls the respective stored completion
+        passwordChanger.changeCallSuccess()
+        
+        XCTAssertFalse(sut.activityIndicator.isAnimating)
+    }
+    
+    func test_changePasswordSuccess_shouldHideActivityIndicator() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        XCTAssertNotNil(sut.activityIndicator.superview, "precondition")
+        
+        passwordChanger.changeCallSuccess()
+        
+        XCTAssertNil(sut.activityIndicator.superview)
+    }
+    
+    func test_changePasswordFailure_shouldStopActivityIndicatorAnimation() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton) // this calls `changePassword` in the VC
+        XCTAssertTrue(sut.activityIndicator.isAnimating, "precondition")
+        
+        // This calls the respective stored completion
+        passwordChanger.changeCallFailure(message: "DUMMY")
+        
+        XCTAssertFalse(sut.activityIndicator.isAnimating)
+    }
+    
+    func test_changePasswordFailure_shouldHideActivityIndicator() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        XCTAssertNotNil(sut.activityIndicator.superview, "precondition")
+        
+        passwordChanger.changeCallFailure(message: "DUMMY")
+        
+        XCTAssertNil(sut.activityIndicator.superview)
+    }
+    
+    func test_changePasswordSuccess_shouldShowSuccessAlert() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        
+        passwordChanger.changeCallSuccess()
+        
+        verifyAlertPresented(message: "Your password has been successfully changed.")
+    }
+    
+    func test_tappingOKInSuccessAlert_shouldDismissModal() throws {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        passwordChanger.changeCallSuccess()
+        let dismissalVerifier = DismissalVerifier()
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        dismissalVerifier.verify(animated: true, dismissedViewController: sut)
+    }
 }

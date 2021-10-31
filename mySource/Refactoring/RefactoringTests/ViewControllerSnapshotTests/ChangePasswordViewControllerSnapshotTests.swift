@@ -45,6 +45,8 @@ class ChangePasswordViewControllerSnapshotTests: FBSnapshotTestCase {
     }
     
     // MARK: - Snapshot Helper
+    
+    /// This will add a space where the navbar is typically located, resulting in snapshots closer to the final rendered view
     private func verifySnapshot(file: StaticString = #file, line: UInt = #line) {
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.addSubview(sut.view)

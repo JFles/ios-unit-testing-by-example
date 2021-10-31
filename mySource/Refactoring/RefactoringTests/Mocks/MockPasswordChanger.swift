@@ -54,6 +54,25 @@ final class MockPasswordChanger: PasswordChanging {
         changeWasNeverCalled(file: file, line: line)
     }
     
+    func changeCallSuccess(file: StaticString = #file, line: UInt = #line) {
+        // verify that this isn't called multiple times
+        // This is a VERY good test that would help identify if we have duplicated
+        // client side calls from flow/logic errors
+        guard changeWasCalledOnce(file: file, line: line) else { return }
+        
+        // This calls the respective completion block from `mock Password Changer`
+        changeArgsOnSuccess.last!()
+    }
+    
+    func changeCallFailure(message: String, file: StaticString = #file, line: UInt = #line) {
+        guard changeWasCalledOnce(file: file, line: line) else { return }
+        
+        // This calls the respective completion block from `mock Password Changer`
+        changeArgsOnFailure.last!(message)
+    }
+    
+    // MARK: - Helpers
+    
     private func changeWasCalledOnce(
         file: StaticString = #file, line: UInt = #line
     ) -> Bool {
