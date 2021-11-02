@@ -153,7 +153,10 @@ class ChangePasswordViewControllerTests: XCTestCase {
     
     // MARK: - Submit Button Tests
     
+    
+    
     // MARK: Valdate the Inputs
+    
     private func setUpValidPasswordEntries() {
         sut.oldPasswordTextField.text = "NONEMPTY"
         sut.newPasswordTextField.text = "123456"
@@ -341,6 +344,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
     
     
     // MARK: - Set appearance of password change waiting state
+    
     func test_tappingSubmit_withValidFieldsFocusedOnOldPassword_resignsFocus() {
         setUpValidPasswordEntries()
         putFocusOn(textField: sut.oldPasswordTextField)
@@ -418,6 +422,7 @@ class ChangePasswordViewControllerTests: XCTestCase {
     
     
     // MARK: - Password Changer Tests
+    
     func test_tappingSubmit_withValidFields_shouldRequestChangePassword() {
         // setting the sut props in the test to make it more clear what/how its being tested
         sut.securityToken = "TOKEN"
@@ -576,4 +581,62 @@ class ChangePasswordViewControllerTests: XCTestCase {
         XCTAssertEqual(dismissalVerifier.dismissedCount, 0)
     }
     
+    
+    // MARK: - Text Field Delegate Tests
+    
+    func test_textFieldDelegates_shouldBeConnected() {
+        XCTAssertNotNil(sut.oldPasswordTextField.delegate, "oldPasswordTextField")
+        XCTAssertNotNil(sut.newPasswordTextField.delegate, "newPasswordTextField")
+        XCTAssertNotNil(sut.confirmPasswordTextField.delegate, "confirmPasswordTextField")
+    }
+    
+    func test_hittingReturnFromOldPassword_shouldPutFocusOnNewPassword() {
+        putInViewHierarchy(sut)
+        
+        shouldReturn(in: sut.oldPasswordTextField)
+        
+        XCTAssertTrue(sut.newPasswordTextField.isFirstResponder)
+    }
+    
+    func test_hittingReturnFromNewPassword_shouldPutFocusOnConfirmPassword() {
+        putInViewHierarchy(sut)
+        
+        shouldReturn(in: sut.newPasswordTextField)
+        
+        XCTAssertTrue(sut.confirmPasswordTextField.isFirstResponder)
+    }
+    
+    func test_hittingReturnFromConfirmPassword_shouldRequestPasswordChange() {
+        // setting the sut props in the test to make it more clear what/how its being tested
+        sut.securityToken = "TOKEN"
+        sut.oldPasswordTextField.text = "OLD456"
+        sut.newPasswordTextField.text = "NEW456"
+        sut.confirmPasswordTextField.text = sut.newPasswordTextField.text
+        
+        shouldReturn(in: sut.confirmPasswordTextField)
+        
+        passwordChanger.verifyChange(
+            securityToken: "TOKEN",
+            oldPassword: "OLD456",
+            newPassword: "NEW456"
+        )
+    }
+    
+    // verify that hitting return from only confirm password will request a pw change
+    func test_hittingReturnFromOldPassword_shouldNotRequestPasswordChange() {
+        setUpValidPasswordEntries()
+        
+        shouldReturn(in: sut.oldPasswordTextField)
+        
+        passwordChanger.verifyChangeNeverCalled()
+    }
+    
+    // verify that hitting return from only confirm password will request a pw change
+    func test_hittingReturnFromNewPassword_shouldNotRequestPasswordChange() {
+        setUpValidPasswordEntries()
+        
+        shouldReturn(in: sut.newPasswordTextField)
+        
+        passwordChanger.verifyChangeNeverCalled()
+    }
 }
