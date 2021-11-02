@@ -495,4 +495,85 @@ class ChangePasswordViewControllerTests: XCTestCase {
         
         dismissalVerifier.verify(animated: true, dismissedViewController: sut)
     }
+    
+    func test_changePasswordFailure_shouldShowFailureAlertWithGivenMessage() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        
+        passwordChanger.changeCallFailure(message: "MESSAGE")
+        
+        verifyAlertPresented(message: "MESSAGE")
+    }
+    
+    // MARK: Password Changer Failure Tests
+    
+    private func showPasswordChangeFailureAlert() {
+        setUpValidPasswordEntries()
+        tap(sut.submitButton)
+        passwordChanger.changeCallFailure(message: "DUMMY")
+    }
+    
+    // Hitting OK on the failure alert:
+    
+    // clears the textfields to start over
+    func test_tappingOKInFailureAlert_shouldClearAllFieldsToStartOver() throws {
+        showPasswordChangeFailureAlert()
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.oldPasswordTextField.text?.isEmpty, true, "old")
+        XCTAssertEqual(sut.newPasswordTextField.text?.isEmpty, true, "new")
+        XCTAssertEqual(sut.confirmPasswordTextField.text?.isEmpty, true, "confirmation")
+    }
+    
+    // puts focus on the first text field
+    func test_tappingOKInFailureAlert_shouldPutFocusOnOldPassword() throws {
+        showPasswordChangeFailureAlert()
+        putInViewHierarchy(sut)
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertTrue(sut.oldPasswordTextField.isFirstResponder)
+    }
+    
+    // sets the bg color back to white (is clear underneath the blur view while attempting to save)
+    func test_tappingOKInFailureAlert_shouldSetBackgroundBackToWhite() throws {
+        showPasswordChangeFailureAlert()
+        XCTAssertNotEqual(sut.view.backgroundColor, .white, "precondition")
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(sut.view.backgroundColor, .white)
+    }
+    
+    // removes the blur from the view
+    func test_tappingOKInFailureAlert_shouldHideBlur() throws {
+        showPasswordChangeFailureAlert()
+        XCTAssertNotNil(sut.blurView.superview, "precondition")
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertNil(sut.blurView.superview)
+    }
+    
+    // enables the cancel button
+    func test_tappingOKInFailureAlert_shouldEnableCancelBarButton() throws {
+        showPasswordChangeFailureAlert()
+        XCTAssertFalse(sut.cancelBarButton.isEnabled, "precondition")
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertTrue(sut.cancelBarButton.isEnabled)
+    }
+    
+    // doesn't dismiss the modal
+    func test_tappingOKInFailureAlert_shouldNotDismissModal() throws {
+        showPasswordChangeFailureAlert()
+        let dismissalVerifier = DismissalVerifier()
+        
+        try alertVerifier.executeAction(forButton: "OK")
+        
+        XCTAssertEqual(dismissalVerifier.dismissedCount, 0)
+    }
+    
 }
