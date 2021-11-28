@@ -85,56 +85,48 @@ class ChangePasswordViewController: UIViewController {
         }
 
         if newPasswordTextField.text?.isEmpty ?? true {
-            let alertController = UIAlertController(
-                    title: nil,
-                    message: "Please enter a new password.",
-                    preferredStyle: .alert)
-            let okButton = UIAlertAction(
-                    title: "OK",
-                    style: .default) { [weak self] _ in
+            showAlert(message: "Please enter a new password.") { [weak self] _ in
                 self?.newPasswordTextField.becomeFirstResponder()
             }
-            alertController.addAction(okButton)
-            alertController.preferredAction = okButton
-            self.present(alertController, animated: true)
             return false
         }
 
         if newPasswordTextField.text?.count ?? 0 < 6 {
-            let alertController = UIAlertController(title: nil,
-                message: "The new password should have at least 6 characters.",
-                preferredStyle: .alert)
-            let okButton = UIAlertAction(
-                    title: "OK",
-                    style: .default) { [weak self] _ in
-                self?.newPasswordTextField.text = ""
-                self?.confirmPasswordTextField.text = ""
-                self?.newPasswordTextField.becomeFirstResponder()
+            showAlert(message: "The new password should have at least 6 characters.") { [weak self] _ in
+                guard let self = self else { return }
+                self.newPasswordTextField.text = ""
+                self.confirmPasswordTextField.text = ""
+                self.newPasswordTextField.becomeFirstResponder()
             }
-            alertController.addAction(okButton)
-            alertController.preferredAction = okButton
-            self.present(alertController, animated: true)
             return false
         }
 
         if newPasswordTextField.text != confirmPasswordTextField.text {
-            let alertController = UIAlertController(title: nil,
-                    message: "The new password and the confirmation password "
-                            + "don’t match. Please try again.",
-                    preferredStyle: .alert)
-            let okButton = UIAlertAction(
-                    title: "OK",
-                    style: .default) { [weak self] _ in
-                self?.newPasswordTextField.text = ""
-                self?.confirmPasswordTextField.text = ""
-                self?.newPasswordTextField.becomeFirstResponder()
+            showAlert(message: "The new password and the confirmation password "
+                             + "don’t match. Please try again.") { [weak self] _ in
+                guard let self = self else { return }
+                self.newPasswordTextField.text = ""
+                self.confirmPasswordTextField.text = ""
+                self.newPasswordTextField.becomeFirstResponder()
             }
-            alertController.addAction(okButton)
-            alertController.preferredAction = okButton
-            self.present(alertController, animated: true)
             return false
         }
         return true
+    }
+    
+    private func showAlert(message: String,
+                           okAction: @escaping (UIAlertAction) -> Void) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: message,
+            preferredStyle: .alert)
+        let okButton = UIAlertAction(
+            title: "OK",
+            style: .default,
+            handler: okAction)
+        alertController.addAction(okButton)
+        alertController.preferredAction = okButton
+        self.present(alertController, animated: true)
     }
     
     private func setUpWaitingAppearance() {
