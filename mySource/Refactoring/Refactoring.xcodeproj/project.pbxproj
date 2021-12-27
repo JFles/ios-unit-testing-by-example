@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		607C00B8277A7C7300D9024D /* ViewControllerPresentationSpy.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 607C00B6277A7B9500D9024D /* ViewControllerPresentationSpy.xcframework */; };
 		60AD4BB326DE63BF0097604F /* ChangePasswordViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */; };
-		60D7B62F26E54265007FDA1B /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */; };
-		60D7B63126E5428B007FDA1B /* ViewControllerPresentationSpy.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		60D8ECA326D1C7BC0096F9AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */; };
 		60D8ECA526D1C7BC0096F9AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */; };
 		60D8ECA726D1C7BC0096F9AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D8ECA626D1C7BC0096F9AD /* ViewController.swift */; };
@@ -44,7 +43,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				60D7B63126E5428B007FDA1B /* ViewControllerPresentationSpy.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,8 +71,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		607C00B6277A7B9500D9024D /* ViewControllerPresentationSpy.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ViewControllerPresentationSpy.xcframework; sourceTree = "<group>"; };
 		60AD4BB226DE63BF0097604F /* ChangePasswordViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewControllerTests.swift; sourceTree = "<group>"; };
-		60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ViewControllerPresentationSpy.framework; sourceTree = "<group>"; };
 		60D8EC9F26D1C7BC0096F9AD /* Refactoring.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Refactoring.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D8ECA226D1C7BC0096F9AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60D8ECA426D1C7BC0096F9AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,8 +103,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				607C00B8277A7C7300D9024D /* ViewControllerPresentationSpy.xcframework in Frameworks */,
 				60EFA2C22724F4D90003C112 /* iOSSnapshotTestCase in Frameworks */,
-				60D7B62F26E54265007FDA1B /* ViewControllerPresentationSpy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +156,7 @@
 		60D8ECB826D1C7BE0096F9AD /* RefactoringTests */ = {
 			isa = PBXGroup;
 			children = (
-				60D7B62E26E54265007FDA1B /* ViewControllerPresentationSpy.framework */,
+				607C00B6277A7B9500D9024D /* ViewControllerPresentationSpy.xcframework */,
 				60EFA2B42724EACA0003C112 /* ViewControllerSnapshotTests */,
 				60AD4BB126DE639B0097604F /* ViewControllerTests */,
 				60D8ECDB26D31AB20096F9AD /* Mocks */,
@@ -499,7 +497,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				DEVELOPMENT_TEAM = 3C9P7PTK6N;
 				INFOPLIST_FILE = Refactoring/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -518,7 +516,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				DEVELOPMENT_TEAM = 3C9P7PTK6N;
 				INFOPLIST_FILE = Refactoring/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -537,7 +535,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				DEVELOPMENT_TEAM = 3C9P7PTK6N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/RefactoringTests",
@@ -563,7 +561,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6VWY7MW9MZ;
+				DEVELOPMENT_TEAM = 3C9P7PTK6N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/RefactoringTests",
